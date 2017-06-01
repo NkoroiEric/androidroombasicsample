@@ -23,12 +23,11 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-
+import com.example.android.persistence.util.DateFormatUtil;
+import com.example.android.persistence.R;
 import com.example.android.persistence.databinding.CommentItemBinding;
 import com.example.android.persistence.db.entity.UserEntity;
 import com.example.android.persistence.model.Comment;
-import com.example.android.persistence.R;
-
 import com.example.android.persistence.model.User;
 import java.util.List;
 import java.util.Objects;
@@ -43,6 +42,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     @Nullable
     private final CommentClickCallback mCommentClickCallback;
+    private DateFormatUtil util;
 
     public CommentAdapter(@Nullable CommentClickCallback commentClickCallback) {
         mCommentClickCallback = commentClickCallback;
@@ -100,15 +100,15 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     @Override
     public void onBindViewHolder(CommentViewHolder holder, int position) {
         holder.binding.setComment(mCommentList.get(position));
-        Log.d(TAGS, "User list size: " + mUserList.size());
         for (User user : mUserList){
             if (user.getId() == mCommentList.get(position).getUserId()){
                 Log.d(TAGS, "userId: " + user.getId() + ", " + "comment user id: " + mCommentList.get(position).getUserId());
                 holder.binding.setUser(user);
             }
-            //Log.d(TAGS, "userId: " + user.getId() + ", " + "comment user id: " + mCommentList.get(position).getUserId());
         }
-        //holder.binding.setUser(mUserListmCommentList.get(position).getUserId());
+
+        util = new DateFormatUtil(mCommentList.get(position).getPostedAt());
+        holder.binding.setDate(util);
         holder.binding.executePendingBindings();
     }
 

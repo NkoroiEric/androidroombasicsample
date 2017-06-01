@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Android Architecture Components Basic Sample
 ===================================
 
@@ -115,3 +116,7 @@ the License.
 
 
 
+=======
+# androidroombasicsample
+android Room and LiveData Observable
+>>>>>>> 99951418f3a6b5efca9b307743802b9f4d3c1591

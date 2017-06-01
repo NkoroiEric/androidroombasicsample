@@ -22,11 +22,13 @@ import android.arch.persistence.room.TypeConverters;
 
 import com.example.android.persistence.db.dao.CommentDao;
 import com.example.android.persistence.db.dao.ProductDao;
+import com.example.android.persistence.db.dao.UserDao;
 import com.example.android.persistence.db.entity.CommentEntity;
 import com.example.android.persistence.db.entity.ProductEntity;
 import com.example.android.persistence.db.converter.DateConverter;
+import com.example.android.persistence.db.entity.UserEntity;
 
-@Database(entities = {ProductEntity.class, CommentEntity.class}, version = 1)
+@Database(entities = {ProductEntity.class, UserEntity.class, CommentEntity.class}, version = 1)
 @TypeConverters(DateConverter.class)
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -34,5 +36,10 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract ProductDao productDao();
 
+
+    public abstract UserDao userDao();
+
     public abstract CommentDao commentDao();
+
+
 }

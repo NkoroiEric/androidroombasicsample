@@ -28,12 +28,18 @@ import java.util.Date;
         @ForeignKey(entity = ProductEntity.class,
                 parentColumns = "id",
                 childColumns = "productId",
+                onDelete = ForeignKey.CASCADE),
+        @ForeignKey(entity = UserEntity.class,
+                parentColumns = "id",
+                childColumns = "userId",
                 onDelete = ForeignKey.CASCADE)}, indices = {
-        @Index(value = "productId")
+        @Index(value = "productId"),
+        @Index(value = "userId")
 })
 public class CommentEntity implements Comment {
     @PrimaryKey(autoGenerate = true)
     private int id;
+    private int userId;
     private int productId;
     private String text;
     private Date postedAt;
@@ -45,6 +51,14 @@ public class CommentEntity implements Comment {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Override public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     @Override
@@ -79,6 +93,7 @@ public class CommentEntity implements Comment {
 
     public CommentEntity(Comment comment) {
         id = comment.getId();
+        userId = comment.getUserId();
         productId = comment.getProductId();
         text = comment.getText();
         postedAt = comment.getPostedAt();

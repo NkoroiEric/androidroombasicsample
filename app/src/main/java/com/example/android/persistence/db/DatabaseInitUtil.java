@@ -18,6 +18,7 @@ package com.example.android.persistence.db;
 
 import com.example.android.persistence.db.entity.CommentEntity;
 import com.example.android.persistence.db.entity.ProductEntity;
+import com.example.android.persistence.db.entity.UserEntity;
 import com.example.android.persistence.model.Product;
 
 import java.util.ArrayList;
@@ -40,9 +41,14 @@ class DatabaseInitUtil {
             "Comment 1", "Comment 2", "Comment 3", "Comment 4", "Comment 5", "Comment 6",
     };
 
+    private static final String[] USERS_NAMES = new String[]{
+        "Eric Nkoroi", "Micheal" , "Lucy", "Jane", "John", "Felix"
+    };
+
     static void initializeDb(AppDatabase db) {
         List<ProductEntity> products = new ArrayList<>(FIRST.length * SECOND.length);
         List<CommentEntity> comments = new ArrayList<>();
+        List<UserEntity> users = new ArrayList<>();
 
         generateData(products, comments);
 
@@ -72,6 +78,9 @@ class DatabaseInitUtil {
                         - TimeUnit.DAYS.toMillis(commentsNumber - i) + TimeUnit.HOURS.toMillis(i)));
                 comments.add(comment);
             }
+        }
+
+        for (Product product : products){
         }
     }
 

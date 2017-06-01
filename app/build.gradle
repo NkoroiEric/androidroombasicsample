@@ -76,7 +76,10 @@ dependencies {
     androidTestCompile 'com.android.support:recyclerview-v7:' + rootProject.supportLibVersion;
 
     //AutoValue
-    annotationProcessor "com.google.auto.value:auto-value:$rootProject.ext.autovalueVersion"
+    //annotationProcessor "com.google.auto.value:auto-value:$rootProject.ext.autovalueVersion"
     //provided "com.google.auto.value:auto-value:$rootProject.ext.autovalueVersion"
     //provided "com.jakewharton.auto.value:auto-value-annotations:$rootProject.ext.jakevalueVersion"
+    debugCompile "com.squareup.leakcanary:leakcanary-android:$rootProject.ext.leakVersion"
+    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.ext.leakVersion"
+    testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.ext.leakVersion"
 }

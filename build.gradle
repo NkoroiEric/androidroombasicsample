@@ -51,4 +51,5 @@ ext {
     archRoomVersion = "1.0.0-alpha1"
     autovalueVersion = '1.4.1'
     jakevalueVersion = '1.4'
+    leakVersion = '1.5.1'
 }

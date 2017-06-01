@@ -16,11 +16,11 @@
 
 package com.example.android.persistence.db;
 
+import android.util.Log;
 import com.example.android.persistence.db.entity.CommentEntity;
 import com.example.android.persistence.db.entity.ProductEntity;
 import com.example.android.persistence.db.entity.UserEntity;
 import com.example.android.persistence.model.Product;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -44,18 +44,24 @@ class DatabaseInitUtil {
     private static final String[] USERS_NAMES = new String[]{
         "Eric Nkoroi", "Micheal" , "Lucy", "Jane", "John", "Felix"
     };
+    private static final String TAG = DatabaseInitUtil.class.getSimpleName();
+    static Date date = new Date();
+    private static final long [] dob = new long[]{
+        date.getTime()-1000000, date.getTime()/2, date.getTime()/2, date.getTime()/2, date.getTime()/2, date.getTime()/1
+    };
 
     static void initializeDb(AppDatabase db) {
         List<ProductEntity> products = new ArrayList<>(FIRST.length * SECOND.length);
         List<CommentEntity> comments = new ArrayList<>();
         List<UserEntity> users = new ArrayList<>();
 
-        generateData(products, comments);
+        generateData(products, comments, users);
 
-        insertData(db, products, comments);
+        insertData(db, products, comments, users);
     }
 
-    private static void generateData(List<ProductEntity> products, List<CommentEntity> comments) {
+    private static void generateData(List<ProductEntity> products, List<CommentEntity> comments,
+        List<UserEntity> users) {
         Random rnd = new Random();
         for (int i = 0; i < FIRST.length; i++) {
             for (int j = 0; j < SECOND.length; j++) {
@@ -68,10 +74,23 @@ class DatabaseInitUtil {
             }
         }
 
+        for (int i =0; i < USERS_NAMES.length; i++){
+            UserEntity userEntity = new UserEntity();
+            userEntity.setId(i + 1);
+            userEntity.setName(USERS_NAMES[i]);
+            userEntity.setDateOfBirth(new Date(dob[i]));
+            userEntity.setTimestamp(new Date());
+            Log.d(TAG, "User id: " + i);
+            users.add(userEntity);
+        }
+
         for (Product product : products) {
             int commentsNumber = rnd.nextInt(5) + 1;
             for (int i = 0; i < commentsNumber; i++) {
+                int rndUser = rnd.nextInt(4) + 1;
                 CommentEntity comment = new CommentEntity();
+                Log.d(TAG, "Comments user id: " + users.get(rndUser).getId());
+                comment.setUserId(users.get(rndUser).getId());
                 comment.setProductId(product.getId());
                 comment.setText(COMMENTS[i] + " for " + product.getName());
                 comment.setPostedAt(new Date(System.currentTimeMillis()
@@ -80,14 +99,15 @@ class DatabaseInitUtil {
             }
         }
 
-        for (Product product : products){
-        }
+
     }
 
-    private static void insertData(AppDatabase db, List<ProductEntity> products, List<CommentEntity> comments) {
+    private static void insertData(AppDatabase db, List<ProductEntity> products,
+        List<CommentEntity> comments, List<UserEntity> users) {
         db.beginTransaction();
         try {
             db.productDao().insertAll(products);
+            db.userDao().insertAll(users);
             db.commentDao().insertAll(comments);
             db.setTransactionSuccessful();
         } finally {

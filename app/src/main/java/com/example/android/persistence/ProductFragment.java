@@ -29,6 +29,7 @@ import android.view.ViewGroup;
 import com.example.android.persistence.databinding.ProductFragmentBinding;
 import com.example.android.persistence.db.entity.CommentEntity;
 import com.example.android.persistence.db.entity.ProductEntity;
+import com.example.android.persistence.db.entity.UserEntity;
 import com.example.android.persistence.model.Comment;
 import com.example.android.persistence.ui.CommentAdapter;
 import com.example.android.persistence.ui.CommentClickCallback;
@@ -97,6 +98,17 @@ public class ProductFragment extends LifecycleFragment {
                     mBinding.setIsLoading(false);
                     mCommentAdapter.setCommentList(commentEntities);
                 } else {
+                    mBinding.setIsLoading(true);
+                }
+            }
+        });
+
+        model.getObservableUsers().observe(this, new Observer<List<UserEntity>>() {
+            @Override public void onChanged(@Nullable List<UserEntity> userEntities) {
+                if (userEntities != null){
+                    mBinding.setIsLoading(false);
+                    mCommentAdapter.setUserList(userEntities);
+                }else{
                     mBinding.setIsLoading(true);
                 }
             }

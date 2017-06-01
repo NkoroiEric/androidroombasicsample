@@ -20,19 +20,26 @@ import android.databinding.DataBindingUtil;
 import android.support.annotation.Nullable;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.example.android.persistence.databinding.CommentItemBinding;
+import com.example.android.persistence.db.entity.UserEntity;
 import com.example.android.persistence.model.Comment;
 import com.example.android.persistence.R;
 
+import com.example.android.persistence.model.User;
 import java.util.List;
 import java.util.Objects;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
 
+    private static final String TAGS = CommentAdapter.class.getSimpleName();
     private List<? extends Comment> mCommentList;
+    private List<? extends User> mUserList;
+    private User mUser;
+
 
     @Nullable
     private final CommentClickCallback mCommentClickCallback;
@@ -40,7 +47,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     public CommentAdapter(@Nullable CommentClickCallback commentClickCallback) {
         mCommentClickCallback = commentClickCallback;
     }
-
+    public void setUserList(final List<UserEntity> userEntities) {
+            mUserList = userEntities;
+    }
     public void setCommentList(final List<? extends Comment> comments) {
         if (mCommentList == null) {
             mCommentList = comments;
@@ -91,6 +100,15 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     @Override
     public void onBindViewHolder(CommentViewHolder holder, int position) {
         holder.binding.setComment(mCommentList.get(position));
+        Log.d(TAGS, "User list size: " + mUserList.size());
+        for (User user : mUserList){
+            if (user.getId() == mCommentList.get(position).getUserId()){
+                Log.d(TAGS, "userId: " + user.getId() + ", " + "comment user id: " + mCommentList.get(position).getUserId());
+                holder.binding.setUser(user);
+            }
+            //Log.d(TAGS, "userId: " + user.getId() + ", " + "comment user id: " + mCommentList.get(position).getUserId());
+        }
+        //holder.binding.setUser(mUserListmCommentList.get(position).getUserId());
         holder.binding.executePendingBindings();
     }
 
@@ -98,6 +116,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     public int getItemCount() {
         return mCommentList == null ? 0 : mCommentList.size();
     }
+
+
 
     static class CommentViewHolder extends RecyclerView.ViewHolder {
 

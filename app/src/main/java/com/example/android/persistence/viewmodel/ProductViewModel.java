@@ -31,6 +31,7 @@ import com.example.android.persistence.db.DatabaseCreator;
 import com.example.android.persistence.db.entity.CommentEntity;
 import com.example.android.persistence.db.entity.ProductEntity;
 
+import com.example.android.persistence.db.entity.UserEntity;
 import java.util.List;
 
 public class ProductViewModel extends AndroidViewModel {
@@ -49,6 +50,8 @@ public class ProductViewModel extends AndroidViewModel {
 
     private final LiveData<List<CommentEntity>> mObservableComments;
 
+    private final LiveData<List<UserEntity>> mObservableUsers;
+
     public ProductViewModel(@NonNull Application application,
                             final int productId) {
         super(application);
@@ -66,6 +69,18 @@ public class ProductViewModel extends AndroidViewModel {
                     //noinspection ConstantConditions
                     return databaseCreator.getDatabase().commentDao().loadComments(mProductId);
                 }
+            }
+        });
+
+        mObservableUsers = Transformations.switchMap(databaseCreator.isDatabaseCreated(), new Function<Boolean, LiveData<List<UserEntity>>>() {
+            @Override public LiveData<List<UserEntity>> apply(Boolean input) {
+                if (!input){
+                    //noinspection unchecked
+                    return ABSENT;
+                }else{
+                    return databaseCreator.getDatabase().userDao().loadUsers();
+                }
+
             }
         });
 
@@ -94,6 +109,10 @@ public class ProductViewModel extends AndroidViewModel {
 
     public LiveData<ProductEntity> getObservableProduct() {
         return mObservableProduct;
+    }
+
+    public LiveData<List<UserEntity>> getObservableUsers(){
+        return mObservableUsers;
     }
 
     public void setProduct(ProductEntity product) {

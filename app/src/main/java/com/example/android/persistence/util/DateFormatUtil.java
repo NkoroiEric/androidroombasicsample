@@ -16,7 +16,6 @@ public class DateFormatUtil {
   }
 
   public String getForm() {
-    SimpleDateFormat format = new SimpleDateFormat("yyyy-dd-MM hh:mm a");
-    return format.format(date);
+    return new SimpleDateFormat("yyyy-dd-MM hh:mm a").format(date);
   }
 }
